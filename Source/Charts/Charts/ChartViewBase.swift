@@ -140,6 +140,9 @@ open class ChartViewBase: NSUIView, ChartDataProvider, AnimatorDelegate
     /// color of the no data text
     @objc open var noDataTextColor: NSUIColor = NSUIColor.black
     
+    /// Aligment of the no data text.
+    @objc open var noDataParagraphStyle: NSParagraphStyle!
+    
     @objc internal var _legendRenderer: LegendRenderer!
     
     /// object responsible for rendering the data
@@ -231,6 +234,9 @@ open class ChartViewBase: NSUIView, ChartDataProvider, AnimatorDelegate
         
         _xAxis = XAxis()
         
+        let paragraphStyle = NSMutableParagraphStyle()
+        paragraphStyle.alignment = .center
+        noDataParagraphStyle = paragraphStyle
         self.addObserver(self, forKeyPath: "bounds", options: .new, context: nil)
         self.addObserver(self, forKeyPath: "frame", options: .new, context: nil)
     }
@@ -361,14 +367,16 @@ open class ChartViewBase: NSUIView, ChartDataProvider, AnimatorDelegate
         {
             context.saveGState()
             defer { context.restoreGState() }
-            
+
             ChartUtils.drawMultilineText(
                 context: context,
                 text: noDataText,
                 point: CGPoint(x: frame.width / 2.0, y: frame.height / 2.0),
                 attributes:
                 [NSAttributedStringKey.font: noDataFont,
-                 NSAttributedStringKey.foregroundColor: noDataTextColor],
+                 NSAttributedStringKey.foregroundColor: noDataTextColor,
+                 NSAttributedStringKey.paragraphStyle: noDataParagraphStyle
+                 ],
                 constrainedToSize: self.bounds.size,
                 anchor: CGPoint(x: 0.5, y: 0.5),
                 angleRadians: 0.0)

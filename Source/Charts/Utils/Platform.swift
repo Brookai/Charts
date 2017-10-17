@@ -8,6 +8,7 @@ types are aliased to either their UI* implementation (on iOS) or their NS* imple
 	
 	public typealias NSUIFont = UIFont
 	public typealias NSUIColor = UIColor
+    public typealias NSParagraphSytle =  NSParagraphStyle
 	public typealias NSUIEvent = UIEvent
 	public typealias NSUITouch = UITouch
 	public typealias NSUIImage = UIImage
