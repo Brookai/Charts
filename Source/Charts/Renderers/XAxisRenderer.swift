@@ -296,7 +296,8 @@ open class XAxisRenderer: AxisRendererBase
         
         context.saveGState()
         defer { context.restoreGState() }
-        context.clip(to: self.gridClippingRect)
+        // Clip to include the bottom part to add the small line at the bottom.
+        context.clip(to: gridClippingRect.offsetBy(dx: 0, dy: 4))
         
         context.setShouldAntialias(xAxis.gridAntialiasEnabled)
         context.setStrokeColor(xAxis.gridColor.cgColor)
@@ -347,8 +348,9 @@ open class XAxisRenderer: AxisRendererBase
             && x <= viewPortHandler.chartWidth
         {
             context.beginPath()
-            context.move(to: CGPoint(x: x, y: viewPortHandler.contentTop))
-            context.addLine(to: CGPoint(x: x, y: viewPortHandler.contentBottom))
+            // Modify to just paint a small line below the chart
+            context.move(to: CGPoint(x: x, y: viewPortHandler.contentBottom))
+            context.addLine(to: CGPoint(x: x, y: viewPortHandler.contentBottom + 4))
             context.strokePath()
         }
     }
