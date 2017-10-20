@@ -37,7 +37,7 @@ open class YAxis: AxisBase
         case left
         case right
     }
-    
+    open var skipLastGrid =  false
     /// indicates if the bottom y-label entry is drawn or not
     @objc open var drawBottomYLabelEntryEnabled = true
     
