@@ -54,7 +54,8 @@ open class BubbleChartRenderer: BarLineScatterCandleBubbleRenderer
             ? ((maxSize == 0.0) ? 1.0 : sqrt(entrySize / maxSize))
             : entrySize
         let shapeSize: CGFloat = reference * factor
-        return shapeSize
+        //return shapeSize
+        return entrySize
     }
     
     fileprivate var _pointBuffer = CGPoint()
@@ -91,7 +92,8 @@ open class BubbleChartRenderer: BarLineScatterCandleBubbleRenderer
         let maxBubbleWidth: CGFloat = abs(_sizeBuffer[1].x - _sizeBuffer[0].x)
         let maxBubbleHeight: CGFloat = abs(viewPortHandler.contentBottom - viewPortHandler.contentTop)
         let referenceSize: CGFloat = min(maxBubbleHeight, maxBubbleWidth)
-        
+        let valueFont = dataSet.valueFont
+        let iconsOffset = dataSet.iconsOffset
         for j in stride(from: _xBounds.min, through: _xBounds.range + _xBounds.min, by: 1)
         {
             guard let entry = dataSet.entryForIndex(j) as? BubbleChartDataEntry else { continue }
@@ -128,8 +130,44 @@ open class BubbleChartRenderer: BarLineScatterCandleBubbleRenderer
                 height: shapeSize
             )
 
+            let shadow = UIColor.brookGrey(alpha: 0.5).cgColor
+            context.setShadow(offset: CGSize(width: 2, height:2), blur: 1.0, color: shadow)
             context.setFillColor(color.cgColor)
             context.fillEllipse(in: rect)
+            context.setShadow(offset: CGSize(width: 0, height:0), blur: 0, color: UIColor.black.cgColor)
+            context.setLineWidth(1)
+            context.setStrokeColor(UIColor.white.cgColor)
+            context.strokeEllipse(in: rect)
+            
+            if isDrawingValuesAllowed(dataProvider: dataProvider) {
+            let text : String?
+            if let food =  entry.data as? FoodActivity {
+                text  = food.carbSize.letter
+            }else {
+                text = "" //formatter.string(from: entry.size as NSNumber)
+            }
+            
+            let valueTextColor = dataSet.valueTextColorAt(j)
+            // Draw Values in teh fuction that the circle so they get overlapped.
+            ChartUtils.drawText(
+                context: context,
+                text: text!,
+                point: CGPoint(
+                    x: rect.midX,
+                    y: rect.midY - (0.5 *  valueFont.lineHeight)),//pt.y ),
+                align: .center,
+                attributes: [NSAttributedStringKey.font: valueFont, NSAttributedStringKey.foregroundColor: valueTextColor]
+                )
+            }
+            
+            if let icon = entry.icon, dataSet.isDrawIconsEnabled
+            {
+                ChartUtils.drawImage(context: context,
+                                     image: icon,
+                                     x: rect.midX + iconsOffset.x,
+                                     y: rect.midY + iconsOffset.y,
+                                     size: icon.size)
+            }
         }
         
         context.restoreGState()
@@ -137,6 +175,7 @@ open class BubbleChartRenderer: BarLineScatterCandleBubbleRenderer
     
     open override func drawValues(context: CGContext)
     {
+        return
         guard let
             dataProvider = dataProvider,
             let viewPortHandler = self.viewPortHandler,
@@ -206,7 +245,7 @@ open class BubbleChartRenderer: BarLineScatterCandleBubbleRenderer
 
                     if dataSet.isDrawValuesEnabled
                     {
-                        ChartUtils.drawText(
+                       ChartUtils.drawText(
                             context: context,
                             text: text,
                             point: CGPoint(
@@ -214,6 +253,7 @@ open class BubbleChartRenderer: BarLineScatterCandleBubbleRenderer
                                 y: pt.y - (0.5 * lineHeight)),
                             align: .center,
                             attributes: [NSAttributedStringKey.font: valueFont, NSAttributedStringKey.foregroundColor: valueTextColor])
+ 
                     }
                     
                     if let icon = e.icon, dataSet.isDrawIconsEnabled
