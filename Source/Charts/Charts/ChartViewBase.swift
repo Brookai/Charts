@@ -363,7 +363,7 @@ open class ChartViewBase: NSUIView, ChartDataProvider, AnimatorDelegate
         
         let frame = self.bounds
 
-        if _data === nil && noDataText.characters.count > 0
+        if _data === nil && noDataText.count > 0
         {
             context.saveGState()
             defer { context.restoreGState() }
@@ -399,7 +399,7 @@ open class ChartViewBase: NSUIView, ChartDataProvider, AnimatorDelegate
             let description = chartDescription,
             description.isEnabled,
             let descriptionText = description.text,
-            descriptionText.characters.count > 0
+            descriptionText.count > 0
             else { return }
         
         var position = description.position
@@ -443,6 +443,7 @@ open class ChartViewBase: NSUIView, ChartDataProvider, AnimatorDelegate
         set { _highlightPerTapEnabled = newValue }
     }
     
+    open var shouldDrawHighLight : Bool = true
     /// - returns: `true` if values can be highlighted via tap gesture, `false` ifnot.
     @objc open var isHighLightPerTapEnabled: Bool
     {
@@ -453,7 +454,7 @@ open class ChartViewBase: NSUIView, ChartDataProvider, AnimatorDelegate
     /// - returns: `true` if there are values to highlight, `false` ifthere are no values to highlight.
     @objc open func valuesToHighlight() -> Bool
     {
-        return _indicesToHighlight.count > 0
+        return _indicesToHighlight.count > 0 && shouldDrawHighLight
     }
 
     /// Highlights the values at the given indices in the given DataSets. Provide

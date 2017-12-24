@@ -224,7 +224,8 @@ open class XAxisRenderer: AxisRendererBase
             position.y = 0.0
             position = position.applying(valueToPixelMatrix)
             
-            if viewPortHandler.isInBoundsX(position.x)
+            
+            if true //viewPortHandler.isInBoundsX(position.x)
             {
                 let label = xAxis.valueFormatter?.stringForValue(xAxis.entries[i], axis: xAxis) ?? ""
 
@@ -335,6 +336,8 @@ open class XAxisRenderer: AxisRendererBase
         let dx = self.axis?.gridLineWidth ?? 0.0
         contentRect.origin.x -= dx / 2.0
         contentRect.size.width += dx
+//        contentRect.size.width += contentRect.origin.x
+//        contentRect.origin.x = 0
         return contentRect
     }
     
@@ -433,7 +436,7 @@ open class XAxisRenderer: AxisRendererBase
         let label = limitLine.label
         
         // if drawing the limit-value label is enabled
-        if limitLine.drawLabelEnabled && label.characters.count > 0
+        if limitLine.drawLabelEnabled && label.count > 0
         {
             let labelLineHeight = limitLine.valueFont.lineHeight
             
