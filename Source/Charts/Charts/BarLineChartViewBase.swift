@@ -1486,9 +1486,9 @@ open class BarLineChartViewBase: ChartViewBase, BarLineScatterCandleBubbleChartD
         }
         else
         {
-            DispatchQueue.main.async(execute: {
+            DispatchQueue.main.async{
                 self.setViewPortOffsets(left: left, top: top, right: right, bottom: bottom)
-            })
+            }
         }
     }
 
