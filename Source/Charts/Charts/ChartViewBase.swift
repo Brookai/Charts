@@ -108,8 +108,6 @@ open class ChartViewBase: NSUIView, ChartDataProvider, AnimatorDelegate
     /// Aligment of the no data text.
     @objc open var noDataParagraphStyle: NSParagraphStyle!
     
-    @objc internal var _legendRenderer: LegendRenderer!
-    
     /// object responsible for rendering the data
     @objc open var renderer: DataRenderer?
     
