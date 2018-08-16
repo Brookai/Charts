@@ -180,7 +180,7 @@ open class YAxisRenderer: NSObject, AxisRenderer
             }
             
             // draw the grid
-            let count = positions.count -  (yAxis.skipLastGrid ? 1 : 0)
+            let count = positions.count - (axis.skipLastGrid ? 1 : 0)
             for i in 0 ..< count
             {
                 drawGridLine(context: context, position: positions[i])

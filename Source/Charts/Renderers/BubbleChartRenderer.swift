@@ -66,11 +66,6 @@ open class BubbleChartRenderer: BarLineScatterCandleBubbleRenderer
         reference: CGFloat,
         normalizeSize: Bool) -> CGFloat
     {
-      //  let factor: CGFloat = normalizeSize
-      //      ? ((maxSize == 0.0) ? 1.0 : sqrt(entrySize / maxSize))
-       //     : entrySize
-        //let shapeSize: CGFloat = reference * factor
-        //return shapeSize
         return entrySize
     }
     
@@ -107,6 +102,7 @@ open class BubbleChartRenderer: BarLineScatterCandleBubbleRenderer
         let referenceSize: CGFloat = min(maxBubbleHeight, maxBubbleWidth)
         let valueFont = dataSet.valueFont
         let iconsOffset = dataSet.iconsOffset
+        
         for j in stride(from: _xBounds.min, through: _xBounds.range + _xBounds.min, by: 1)
         {
             guard let entry = dataSet.entryForIndex(j) as? BubbleChartDataEntry else { continue }
