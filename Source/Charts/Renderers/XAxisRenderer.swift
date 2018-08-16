@@ -447,7 +447,7 @@ open class XAxisRenderer: NSObject, AxisRenderer
             context.beginPath()
             // Modify to just paint a small line below the chart
             context.move(to: CGPoint(x: x, y: viewPortHandler.contentBottom))
-            context.addLine(to: CGPoint(x: x, y: viewPortHandler.contentBottom + 4))
+            context.addLine(to: CGPoint(x: x, y: viewPortHandler.contentBottom + 4)) 
             context.strokePath()
         }
     }

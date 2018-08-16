@@ -23,6 +23,7 @@ open class AxisBase: ComponentBase
     
     /// Custom formatter that is used instead of the auto-formatter if set
     private lazy var _axisValueFormatter: AxisValueFormatter = DefaultAxisValueFormatter(decimals: decimals)
+    
     open var maxLabelCount = 15
     @objc open var labelFont = NSUIFont.systemFont(ofSize: 10.0)
     @objc open var labelTextColor = NSUIColor.black
@@ -250,7 +251,12 @@ open class AxisBase: ComponentBase
             
             let range = axisMinLabels...axisMaxLabels as ClosedRange
             _labelCount = newValue.clamped(to: range)
-                        
+            
+            // Restrict labels to 15
+            if _labelCount > maxLabelCount  {
+                _labelCount = maxLabelCount
+            }
+            
             forceLabelsEnabled = false
         }
     }
