@@ -150,24 +150,23 @@ open class BubbleChartRenderer: BarLineScatterCandleBubbleRenderer
             
             let valueTextColor = dataSet.valueTextColorAt(j)
             // Draw Values in teh fuction that the circle so they get overlapped.
-            ChartUtils.drawText(
-                context: context,
-                text: text!,
-                point: CGPoint(
-                    x: rect.midX,
-                    y: rect.midY - (0.5 *  valueFont.lineHeight)),//pt.y ),
-                align: .center,
-                attributes: [NSAttributedStringKey.font: valueFont, NSAttributedStringKey.foregroundColor: valueTextColor]
+                context.drawText(
+                    text!,
+                    at: CGPoint(
+                        x: rect.midX,
+                        y: rect.midY - (0.5 *  valueFont.lineHeight)),
+                    align: .center,
+                    attributes: [NSAttributedStringKey.font: valueFont, NSAttributedStringKey.foregroundColor: valueTextColor]
                 )
             }
             
             if let icon = entry.icon, dataSet.isDrawIconsEnabled
             {
-                ChartUtils.drawImage(context: context,
-                                     image: icon,
-                                     x: rect.midX + iconsOffset.x,
-                                     y: rect.midY + iconsOffset.y,
-                                     size: icon.size)
+                context.drawImage(icon,
+                                  atCenter: CGPoint(
+                                    x: rect.midX + iconsOffset.x,
+                                    y: rect.midY + iconsOffset.y),
+                                  size: icon.size)
             }
 
             // Create and append the corresponding accessibility element to accessibilityOrderedElements
