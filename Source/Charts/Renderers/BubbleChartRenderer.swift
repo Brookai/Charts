@@ -156,7 +156,7 @@ open class BubbleChartRenderer: BarLineScatterCandleBubbleRenderer
                         x: rect.midX,
                         y: rect.midY - (0.5 *  valueFont.lineHeight)),
                     align: .center,
-                    attributes: [NSAttributedStringKey.font: valueFont, NSAttributedStringKey.foregroundColor: valueTextColor]
+                    attributes: [NSAttributedString.Key.font: valueFont, NSAttributedString.Key.foregroundColor: valueTextColor]
                 )
             }
             
