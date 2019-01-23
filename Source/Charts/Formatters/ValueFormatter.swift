@@ -13,9 +13,9 @@ import Foundation
 
 /// Interface that allows custom formatting of all values inside the chart before they are being drawn to the screen.
 ///
-/// Simply create your own formatting class and let it implement ValueFormatter.
-///
-/// Then override the getFormattedValue(...) method and return whatever you want.
+/// Simply create your own formatting class and let it implement ValueFormatter. Then override the stringForValue()
+/// method and return whatever you want.
+
 @objc(ChartValueFormatter)
 public protocol ValueFormatter: class
 {
