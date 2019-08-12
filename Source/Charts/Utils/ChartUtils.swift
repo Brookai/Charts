@@ -116,39 +116,99 @@ extension CGContext {
         var drawOffset = CGPoint()
         drawOffset.x = center.x - (size.width / 2)
         drawOffset.y = center.y - (size.height / 2)
-
+        
         NSUIGraphicsPushContext(self)
-
-        if image.size.width != size.width && image.size.height != size.height
+        
+        let scaledImage :  UIImage
+        if image.size.width > size.width && image.size.height > size.height
         {
             let key = "resized_\(size.width)_\(size.height)"
 
             // Try to take scaled image from cache of this image
-            var scaledImage = objc_getAssociatedObject(image, key) as? NSUIImage
-            if scaledImage == nil
+            var cachedScaledImage = objc_getAssociatedObject(image, key) as? NSUIImage
+            if cachedScaledImage == nil
             {
                 // Scale the image
                 NSUIGraphicsBeginImageContextWithOptions(size, false, 0.0)
 
                 image.draw(in: CGRect(origin: .zero, size: size))
 
-                scaledImage = NSUIGraphicsGetImageFromCurrentImageContext()
+                cachedScaledImage = NSUIGraphicsGetImageFromCurrentImageContext()
                 NSUIGraphicsEndImageContext()
 
                 // Put the scaled image in a cache owned by the original image
-                objc_setAssociatedObject(image, key, scaledImage, .OBJC_ASSOCIATION_RETAIN_NONATOMIC)
+                objc_setAssociatedObject(image, key, cachedScaledImage, .OBJC_ASSOCIATION_RETAIN_NONATOMIC)
             }
-
-            scaledImage?.draw(in: CGRect(origin: drawOffset, size: size))
+            scaledImage = cachedScaledImage!
+        }else{
+            scaledImage = image
         }
-        else
-        {
-            image.draw(in: CGRect(origin: drawOffset, size: size))
+        let darkBlueGradient = UIColor.darkBlueGradient()
+        let offset : CGFloat = 10
+        let gradientFrame = CGRect(origin: .zero, size: CGSize(width: size.width+offset, height: size.height+offset))
+        let locations = darkBlueGradient.locations.map{ $0 as! CGFloat}
+        let colors = darkBlueGradient.colors as CFArray
+        let gradient = CGGradient(colorsSpace: CGColorSpaceCreateDeviceRGB(),
+                                  colors: colors,
+                                  locations:  locations)
+        
+        
+        let renderer = UIGraphicsImageRenderer(size: gradientFrame.size)
+        let gradientImage =  renderer.image { context in
+            let path = UIBezierPath(roundedRect: gradientFrame,
+                                    cornerRadius: gradientFrame.width/2)
+            path.addClip()
+            context.cgContext.drawLinearGradient(gradient!, start: .zero, end: CGPoint(x: 0, y: gradientFrame.height), options: [])
+            let origin = CGPoint(x: (gradientFrame.width - image.size.width)/2,
+            y: (gradientFrame.height - image.size.height)/2)
+            scaledImage.draw(at: origin)
         }
+        
+        gradientImage.draw(in: CGRect(origin: drawOffset, size: gradientFrame.size) )
 
         NSUIGraphicsPopContext()
     }
 
+    open func drawText(_ text: String, in rect: CGRect, align: NSTextAlignment, anchor: CGPoint = CGPoint(x: 0.5, y: 0.5), angleRadians: CGFloat = 0.0, attributes: [NSAttributedString.Key : Any] ){
+        guard text.trim().count > 0  else {
+            return
+        }
+        
+        NSUIGraphicsPushContext(self)
+        let darkBlueGradient = UIColor.darkBlueGradient()
+        let offset : CGFloat = 10
+        let gradientFrame = CGRect(origin: .zero, size: CGSize(width: rect.size.width+offset, height: rect.size.height+offset))
+        let locations = darkBlueGradient.locations.map{ $0 as! CGFloat}
+        let colors = darkBlueGradient.colors as CFArray
+        let gradient = CGGradient(colorsSpace: CGColorSpaceCreateDeviceRGB(),
+                                 colors: colors,
+                                 locations:  locations)
+        
+        let at :  CGPoint
+        
+        if let valueFont = attributes[NSAttributedString.Key.font] as? UIFont {
+            let textSize = text.sizeWith(font: valueFont)
+            at = CGPoint(x: gradientFrame.midX - textSize.width/2, y: gradientFrame.midY - valueFont.lineHeight/2 )
+        }else {
+           at =  CGPoint(x: gradientFrame.midX, y: gradientFrame.midY )
+        }
+
+        let renderer = UIGraphicsImageRenderer(size: gradientFrame.size)
+        let gradientImage =  renderer.image { context in
+
+            let path = UIBezierPath(roundedRect: gradientFrame,
+                                    cornerRadius: gradientFrame.width/2)
+            path.addClip()
+            
+            context.cgContext.drawLinearGradient(gradient!, start: .zero, end: CGPoint(x: 0, y: gradientFrame.height), options: [])
+            (text as NSString).draw(at: at, withAttributes: attributes)
+        }
+        
+        
+        gradientImage.draw(in: rect )
+        NSUIGraphicsPopContext()
+    }
+    
     open func drawText(_ text: String, at point: CGPoint, align: NSTextAlignment, anchor: CGPoint = CGPoint(x: 0.5, y: 0.5), angleRadians: CGFloat = 0.0, attributes: [NSAttributedString.Key : Any]?)
     {
         let drawPoint = getDrawPoint(text: text, point: point, align: align, attributes: attributes)
