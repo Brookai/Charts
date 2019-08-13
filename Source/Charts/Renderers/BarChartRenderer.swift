@@ -477,6 +477,7 @@ open class BarChartRenderer: BarLineScatterCandleBubbleRenderer
     
     open func drawGradient(context: CGContext, barRect: CGRect, gradientColors: Array<NSUIColor>, orientation: BarGradientOrientation)
     {
+        
         let cgColors = gradientColors.map{ $0.cgColor } as CFArray
         let gradient:CGGradient?
         if gradientColors.count == 3{
@@ -489,15 +490,16 @@ open class BarChartRenderer: BarLineScatterCandleBubbleRenderer
         let startPoint: CGPoint
         let endPoint: CGPoint
         
+        let frame = (dataProvider as? BarChartView)?.frame ?? .zero
         switch orientation
         {
         case .vertical:
-            startPoint = CGPoint(x: barRect.midX, y: barRect.maxY)
-            endPoint = CGPoint(x: barRect.midX, y: barRect.minY)
+            startPoint = CGPoint(x: barRect.midX, y:frame.height)
+            endPoint = CGPoint(x: barRect.midX, y:0)
             
         case .horizontal:
-            startPoint = CGPoint(x: barRect.minX, y: barRect.midY)
-            endPoint = CGPoint(x: barRect.maxX, y: barRect.midY)
+            startPoint = CGPoint(x: 0, y: barRect.midY)
+            endPoint = CGPoint(x: frame.width, y: barRect.midY)
         }
         
         let path = CGPath(rect: barRect, transform: nil)
