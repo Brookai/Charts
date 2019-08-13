@@ -122,23 +122,12 @@ open class BubbleChartRenderer: BarLineScatterCandleBubbleRenderer
             
             guard viewPortHandler.isInBoundsRight(_pointBuffer.x - shapeHalf) else { break }
             
-            let color = dataSet.color(atIndex: j)
-            
             let rect = CGRect(
                 x: _pointBuffer.x - shapeHalf,
                 y: _pointBuffer.y - shapeHalf,
                 width: shapeSize,
                 height: shapeSize
             )
-            
-//            let shadow = UIColor.brookGrey(alpha: 0.5).cgColor
-//            context.setShadow(offset: CGSize(width: 2, height:2), blur: 1.0, color: shadow)
-//            context.setFillColor(color.cgColor)
-//            context.fillEllipse(in: rect)
-//            context.setShadow(offset: CGSize(width: 0, height:0), blur: 0, color: UIColor.black.cgColor)
-//            context.setLineWidth(1)
-//            context.setStrokeColor(UIColor.white.cgColor)
-//            context.strokeEllipse(in: rect)
             
             if isDrawingValuesAllowed(dataProvider: dataProvider) {
                 let text : String?
