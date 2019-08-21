@@ -501,10 +501,27 @@ open class BarChartRenderer: BarLineScatterCandleBubbleRenderer
             startPoint = CGPoint(x: 0, y: barRect.midY)
             endPoint = CGPoint(x: frame.width, y: barRect.midY)
         }
+       
         
-        let path = CGPath(rect: barRect, transform: nil)
+        
+        let path =  CGMutablePath()
+        if barRect.height > 0 {
+            let cornerW = min(barRect.width/3, 10)
+            let cornerH = min( min(barRect.height/3, 10), cornerW)
+            path.addRoundedRect(in: barRect, cornerWidth: cornerW , cornerHeight: cornerH)
+            var rect = barRect
+            rect.origin.y += rect.height - cornerH
+            rect.size.height = cornerH
+            
+            path.addRect(rect)
+        }else{
+            path.addRect(barRect)
+        }
+        
+            
         
         context.addPath(path)
+        
         context.clip()
         context.drawLinearGradient(gradient!, start: startPoint, end: endPoint, options: [])
     }
