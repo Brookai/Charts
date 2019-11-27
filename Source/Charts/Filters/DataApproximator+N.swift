@@ -8,7 +8,7 @@
 //  https://github.com/danielgindi/Charts
 //
 
-import Foundation
+import Foundation 
 
 extension CGPoint {
     fileprivate func distanceToLine(from linePoint1: CGPoint, to linePoint2: CGPoint) -> CGFloat {
