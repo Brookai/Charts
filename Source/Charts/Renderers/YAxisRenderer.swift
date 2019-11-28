@@ -191,7 +191,12 @@ open class YAxisRenderer: AxisRendererBase
             }
             
             // draw the grid
-            positions.forEach { drawGridLine(context: context, position: $0) }
+            for i in 0 ..< positions.count
+            let count = positions.count -  (yAxis.skipLastGrid ? 1 : 0)
+            for i in 0 ..< count
+            {
+                drawGridLine(context: context, position: positions[i])
+            }
         }
 
         if yAxis.drawZeroLineEnabled
