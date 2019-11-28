@@ -112,7 +112,8 @@ open class AxisRendererBase: Renderer
         // This is used to avoid repeated values when rounding values for display.
         if axis.granularityEnabled
         {
-            interval = interval < axis.granularity ? axis.granularity : interval
+            interval = axis.granularity == 0 ? interval : axis.granularity
+           // interval = interval < axis.granularity ? axis.granularity : interval
         }
         
         // Normalize interval
@@ -150,7 +151,7 @@ open class AxisRendererBase: Renderer
         {
             // no forced count
         
-            var first = interval == 0.0 ? 0.0 : ceil(yMin / interval) * interval
+            var first : Double = 0 //interval == 0.0 ? 0.0 : ceil(yMin / interval) * interval
             
             if axis.centerAxisLabelsEnabled
             {

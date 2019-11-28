@@ -406,7 +406,8 @@ open class ChartViewBase: NSUIView, ChartDataProvider, AnimatorDelegate
         set { _highlightPerTapEnabled = newValue }
     }
     
-    /// `true` if values can be highlighted via tap gesture, `false` ifnot.
+    open var shouldDrawHighLight : Bool = true
+    /// - returns: `true` if values can be highlighted via tap gesture, `false` ifnot.
     @objc open var isHighLightPerTapEnabled: Bool
     {
         return highlightPerTapEnabled
@@ -417,7 +418,7 @@ open class ChartViewBase: NSUIView, ChartDataProvider, AnimatorDelegate
     /// - Returns: `true` if there are values to highlight, `false` ifthere are no values to highlight.
     @objc open func valuesToHighlight() -> Bool
     {
-        return !_indicesToHighlight.isEmpty
+        return _indicesToHighlight.count > 0 && shouldDrawHighLight
     }
 
     /// Highlights the values at the given indices in the given DataSets. Provide

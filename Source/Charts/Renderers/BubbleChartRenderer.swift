@@ -61,10 +61,10 @@ open class BubbleChartRenderer: BarLineScatterCandleBubbleRenderer
         reference: CGFloat,
         normalizeSize: Bool) -> CGFloat
     {
-        let factor: CGFloat = normalizeSize
-            ? ((maxSize == 0.0) ? 1.0 : sqrt(entrySize / maxSize))
-            : entrySize
-        let shapeSize: CGFloat = reference * factor
+      //  let factor: CGFloat = normalizeSize
+      //      ? ((maxSize == 0.0) ? 1.0 : sqrt(entrySize / maxSize))
+       //     : entrySize
+        //let shapeSize: CGFloat = reference * factor
         //return shapeSize
         return entrySize
     }
@@ -176,6 +176,7 @@ open class BubbleChartRenderer: BarLineScatterCandleBubbleRenderer
     open override func drawValues(context: CGContext)
     {
         return
+        /*
         guard let
             dataProvider = dataProvider,
             let bubbleData = dataProvider.bubbleData,
@@ -300,6 +301,7 @@ open class BubbleChartRenderer: BarLineScatterCandleBubbleRenderer
                 }
             }
         }
+ */
     }
     
     open override func drawExtras(context: CGContext)
