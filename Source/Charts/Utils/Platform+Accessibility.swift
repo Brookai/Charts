@@ -12,7 +12,7 @@ internal func accessibilityPostLayoutChangedNotification(withElement element: An
 
 internal func accessibilityPostScreenChangedNotification(withElement element: Any? = nil)
 {
-    UIAccessibility.post(notification: UIAccessibility.Notification.screenChanged, argument: element)
+    UIAccessibility.post(notification: UIAccessibility.Notification.screenChanged, argument: element )
 }
 
 /// A simple abstraction over UIAccessibilityElement and NSAccessibilityElement.

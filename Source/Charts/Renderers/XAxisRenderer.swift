@@ -179,14 +179,10 @@ open class XAxisRenderer: AxisRendererBase
         let paraStyle = NSParagraphStyle.default.mutableCopy() as! NSMutableParagraphStyle
         paraStyle.alignment = .center
         
-        let labelAttrs: [NSAttributedString.Key : Any] = [
-            .font: xAxis.labelFont,
-            .foregroundColor: xAxis.labelTextColor,
-            .paragraphStyle: paraStyle
-        ]
-        let labelRotationAngleRadians = xAxis.labelRotationAngle.DEG2RAD
-        
-        let centeringEnabled = xAxis.isCenterAxisLabelsEnabled
+        let labelAttrs: [NSAttributedString.Key : Any] = [.font: axis.labelFont,
+                                                         .foregroundColor: axis.labelTextColor,
+                                                         .paragraphStyle: paraStyle]
+        let labelRotationAngleRadians = axis.labelRotationAngle.DEG2RAD
 
         let valueToPixelMatrix = transformer.valueToPixelMatrix
         
@@ -260,7 +256,7 @@ open class XAxisRenderer: AxisRendererBase
         x: CGFloat,
         y: CGFloat,
         attributes: [NSAttributedString.Key : Any],
-        constrainedToSize: CGSize,
+        constrainedTo size: CGSize,
         anchor: CGPoint,
         angleRadians: CGFloat)
     {

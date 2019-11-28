@@ -373,12 +373,15 @@ open class ChartViewBase: NSUIView, ChartDataProvider, AnimatorDelegate
         attrs[NSAttributedString.Key.font] = description.font
         attrs[NSAttributedString.Key.foregroundColor] = description.textColor
 
-        ChartUtils.drawText(
-            context: context,
-            text: descriptionText,
-            point: position,
-            align: description.textAlign,
-            attributes: attrs)
+        let attrs: [NSAttributedString.Key : Any] = [
+            .font: description.font,
+            .foregroundColor: description.textColor
+        ]
+
+        context.drawText(descriptionText,
+                         at: position,
+                         align: description.textAlign,
+                         attributes: attrs)
     }
     
     // MARK: - Accessibility

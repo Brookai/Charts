@@ -163,8 +163,8 @@ open class ChartUtils
         
         NSUIGraphicsPopContext()
     }
-    
-    open class func drawText(context: CGContext, text: String, point: CGPoint, align: NSTextAlignment, attributes: [NSAttributedString.Key : Any]?)
+
+    open func drawText(_ text: String, at point: CGPoint, align: NSTextAlignment, anchor: CGPoint = CGPoint(x: 0.5, y: 0.5), angleRadians: CGFloat = 0.0, attributes: [NSAttributedString.Key : Any]?)
     {
         var point = point
         
@@ -184,7 +184,7 @@ open class ChartUtils
         NSUIGraphicsPopContext()
     }
     
-    open class func drawText(context: CGContext, text: String, point: CGPoint, attributes: [NSAttributedString.Key : Any]?, anchor: CGPoint, angleRadians: CGFloat)
+    open func drawText(_ text: String, at point: CGPoint, anchor: CGPoint = CGPoint(x: 0.5, y: 0.5), angleRadians: CGFloat, attributes: [NSAttributedString.Key : Any]?)
     {
         var drawOffset = CGPoint()
         
@@ -235,13 +235,28 @@ open class ChartUtils
         
         NSUIGraphicsPopContext()
     }
-    
-    internal class func drawMultilineText(context: CGContext, text: String, knownTextSize: CGSize, point: CGPoint, attributes: [NSAttributedString.Key : Any]?, constrainedToSize: CGSize, anchor: CGPoint, angleRadians: CGFloat)
+
+    private func getDrawPoint(text: String, point: CGPoint, align: NSTextAlignment, attributes: [NSAttributedString.Key : Any]?) -> CGPoint
     {
         var rect = CGRect(origin: CGPoint(), size: knownTextSize)
         
-        NSUIGraphicsPushContext(context)
-        
+        if align == .center
+        {
+            point.x -= text.size(withAttributes: attributes).width / 2.0
+        }
+        else if align == .right
+        {
+            point.x -= text.size(withAttributes: attributes).width
+        }
+        return point
+    }
+    
+    func drawMultilineText(_ text: String, at point: CGPoint, constrainedTo size: CGSize, anchor: CGPoint, knownTextSize: CGSize, angleRadians: CGFloat, attributes: [NSAttributedString.Key : Any]?)
+    {
+        var rect = CGRect(origin: .zero, size: knownTextSize)
+
+        NSUIGraphicsPushContext(self)
+
         if angleRadians != 0.0
         {
             // Move the text drawing rect in a way that it always rotates around its center
@@ -290,7 +305,7 @@ open class ChartUtils
         drawMultilineText(context: context, text: text, knownTextSize: rect.size, point: point, attributes: attributes, constrainedToSize: constrainedToSize, anchor: anchor, angleRadians: angleRadians)
     }
 
-    private class func generateDefaultValueFormatter() -> IValueFormatter
+    func drawMultilineText(_ text: String, at point: CGPoint, constrainedTo size: CGSize, anchor: CGPoint, angleRadians: CGFloat, attributes: [NSAttributedString.Key : Any]?)
     {
         let formatter = DefaultValueFormatter(decimals: 1)
         return formatter

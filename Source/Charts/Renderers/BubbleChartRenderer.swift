@@ -151,14 +151,13 @@ open class BubbleChartRenderer: BarLineScatterCandleBubbleRenderer
             
             let valueTextColor = dataSet.valueTextColorAt(j)
             // Draw Values in teh fuction that the circle so they get overlapped.
-            ChartUtils.drawText(
-                context: context,
-                text: text!,
-                point: CGPoint(
-                    x: rect.midX,
-                    y: rect.midY - (0.5 *  valueFont.lineHeight)),//pt.y ),
-                align: .center,
-                attributes: [NSAttributedStringKey.font: valueFont, NSAttributedStringKey.foregroundColor: valueTextColor]
+                context.drawText(
+                    text!,
+                    at: CGPoint(
+                        x: rect.midX,
+                        y: rect.midY - (0.5 *  valueFont.lineHeight)),
+                    align: .center,
+                    attributes: [NSAttributedString.Key.font: valueFont, NSAttributedString.Key.foregroundColor: valueTextColor]
                 )
             }
             
