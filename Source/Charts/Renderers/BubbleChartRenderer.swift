@@ -130,14 +130,14 @@ open class BubbleChartRenderer: BarLineScatterCandleBubbleRenderer
                 height: shapeSize
             )
             
-            let shadow = UIColor.brookGrey(alpha: 0.5).cgColor
-            context.setShadow(offset: CGSize(width: 2, height:2), blur: 1.0, color: shadow)
-            context.setFillColor(color.cgColor)
-            context.fillEllipse(in: rect)
-            context.setShadow(offset: CGSize(width: 0, height:0), blur: 0, color: UIColor.black.cgColor)
-            context.setLineWidth(1)
-            context.setStrokeColor(UIColor.white.cgColor)
-            context.strokeEllipse(in: rect)
+//            let shadow = UIColor.brookGrey(alpha: 0.5).cgColor
+//            context.setShadow(offset: CGSize(width: 2, height:2), blur: 1.0, color: shadow)
+//            context.setFillColor(color.cgColor)
+//            context.fillEllipse(in: rect)
+//            context.setShadow(offset: CGSize(width: 0, height:0), blur: 0, color: UIColor.black.cgColor)
+//            context.setLineWidth(1)
+//            context.setStrokeColor(UIColor.white.cgColor)
+//            context.strokeEllipse(in: rect)
             
             if isDrawingValuesAllowed(dataProvider: dataProvider) {
                 let text : String?
@@ -152,9 +152,7 @@ open class BubbleChartRenderer: BarLineScatterCandleBubbleRenderer
                 // Draw Values in teh fuction that the circle so they get overlapped.
                 context.drawText(
                     text!,
-                    at: CGPoint(
-                        x: rect.midX,
-                        y: rect.midY - (0.5 *  valueFont.lineHeight)),
+                    in: rect,
                     align: .center,
                     attributes: [NSAttributedString.Key.font: valueFont, NSAttributedString.Key.foregroundColor: valueTextColor]
                 )
@@ -162,11 +160,11 @@ open class BubbleChartRenderer: BarLineScatterCandleBubbleRenderer
             
             if let icon = entry.icon, dataSet.isDrawIconsEnabled
             {
-                ChartUtils.drawImage(context: context,
-                                     image: icon,
-                                     x: rect.midX + iconsOffset.x,
-                                     y: rect.midY + iconsOffset.y,
-                                     size: icon.size)
+                context.drawImage(icon,
+                                  atCenter: CGPoint(
+                                    x: rect.midX + iconsOffset.x,
+                                    y: rect.midY + iconsOffset.y),
+                                  size: CGSize(width: 20, height: 20))
             }
             
             // Create and append the corresponding accessibility element to accessibilityOrderedElements
