@@ -421,6 +421,8 @@ open class ChartData: NSObject
     /// - Returns: `true` if a DataSet was removed, `false` ifno DataSet could be removed.
     @objc @discardableResult open func removeDataSet(_ dataSet: IChartDataSet) -> Bool
     {
+        guard let index = firstIndex(where: { $0 === dataSet }) else { return nil }
+        return remove(at: index)
         guard let i = _dataSets.firstIndex(where: { $0 === dataSet }) else { return false }
         return removeDataSetByIndex(i)
     }
@@ -508,6 +510,7 @@ open class ChartData: NSObject
     /// - Returns: The index of the provided DataSet in the DataSet array of this data object, or -1 if it does not exist.
     @objc open func indexOfDataSet(_ dataSet: IChartDataSet) -> Int
     {
+        return firstIndex(where: { $0 === dataSet }) ?? -1
         // TODO: Return nil instead of -1
         return _dataSets.firstIndex { $0 === dataSet } ?? -1
     }
@@ -603,9 +606,32 @@ open class ChartData: NSObject
 
     /// When the data entry value requires a unit, use this property to append the string representation of the unit to the value
     ///
+    /// - Parameters:
+    ///   - label: The label to search for
+    ///   - ignoreCase: if true, the search is not case-sensitive
+    /// - Returns: The index of the DataSet Object with the given label. `nil` if not found
+    public func index(forLabel label: String, ignoreCase: Bool) -> Index?
+    {
+        return ignoreCase
+            ? firstIndex { $0.label?.caseInsensitiveCompare(label) == .orderedSame }
+            : firstIndex { $0.label == label }
+    }
     /// For example, if a value is "44.1", setting this property to "m" allows it to be spoken as "44.1 m"
     @objc open var accessibilityEntryLabelSuffix: String?
 
+    public subscript(label label: String, ignoreCase ignoreCase: Bool) -> Element?
+    {
+        guard let index = index(forLabel: label, ignoreCase: ignoreCase) else { return nil }
+        return self[index]
+    }
+
+    public subscript(entry entry: ChartDataEntry) -> Element?
+    {
+        assert(!(self is CombinedChartData), "\(#function) not supported for CombinedData")
+
+        guard let index = firstIndex(where: { $0.entryForXValue(entry.x, closestToY: entry.y) === entry }) else { return nil }
+        return self[index]
+    }
     /// If the data entry value is a count, set this to true to allow plurals and other grammatical changes
     /// **default**: false
     @objc open var accessibilityEntryLabelSuffixIsCount: Bool = false
