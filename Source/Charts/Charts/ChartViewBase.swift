@@ -105,6 +105,11 @@ open class ChartViewBase: NSUIView, ChartDataProvider, AnimatorDelegate
 
     internal var _legendRenderer: LegendRenderer!
     
+    /// Aligment of the no data text.
+    @objc open var noDataParagraphStyle: NSParagraphStyle!
+    
+    @objc internal var _legendRenderer: LegendRenderer!
+    
     /// object responsible for rendering the data
     @objc open var renderer: DataRenderer?
     
@@ -193,6 +198,9 @@ open class ChartViewBase: NSUIView, ChartDataProvider, AnimatorDelegate
         
         _xAxis = XAxis()
         
+        let paragraphStyle = NSMutableParagraphStyle()
+        paragraphStyle.alignment = .center
+        noDataParagraphStyle = paragraphStyle
         self.addObserver(self, forKeyPath: "bounds", options: .new, context: nil)
         self.addObserver(self, forKeyPath: "frame", options: .new, context: nil)
     }
@@ -325,19 +333,15 @@ open class ChartViewBase: NSUIView, ChartDataProvider, AnimatorDelegate
             context.saveGState()
             defer { context.restoreGState() }
 
-            let paragraphStyle = NSMutableParagraphStyle.default.mutableCopy() as! NSMutableParagraphStyle
-            paragraphStyle.minimumLineHeight = noDataFont.lineHeight
-            paragraphStyle.lineBreakMode = .byWordWrapping
-            paragraphStyle.alignment = noDataTextAlignment
-
             ChartUtils.drawMultilineText(
                 context: context,
                 text: noDataText,
                 point: CGPoint(x: frame.width / 2.0, y: frame.height / 2.0),
                 attributes:
-                [.font: noDataFont,
-                 .foregroundColor: noDataTextColor,
-                 .paragraphStyle: paragraphStyle],
+                [NSAttributedStringKey.font: noDataFont,
+                 NSAttributedStringKey.foregroundColor: noDataTextColor,
+                 NSAttributedStringKey.paragraphStyle: noDataParagraphStyle
+                 ],
                 constrainedToSize: self.bounds.size,
                 anchor: CGPoint(x: 0.5, y: 0.5),
                 angleRadians: 0.0)

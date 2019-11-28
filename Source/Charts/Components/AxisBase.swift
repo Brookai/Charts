@@ -236,9 +236,11 @@ open class AxisBase: ComponentBase
         }
         set
         {
-            let range = axisMinLabels...axisMaxLabels as ClosedRange
-            _labelCount = newValue.clamped(to: range)
-                        
+            _labelCount = newValue
+            if _labelCount > 15
+            {
+                _labelCount = 15
+            }
             forceLabelsEnabled = false
         }
     }
