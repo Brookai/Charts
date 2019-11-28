@@ -467,7 +467,7 @@ open class LegendRenderer: Renderer
                     
                     if direction == .rightToLeft
                     {
-                        posX -= (e.label! as NSString).size(withAttributes: [.font: labelFont]).width
+                        posX -= e.label?.size(withAttributes: [NSAttributedStringKey.font: labelFont]).width ?? 0
                     }
                     
                     if !wasStacked
